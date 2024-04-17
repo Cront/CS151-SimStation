@@ -129,7 +129,7 @@ public class Agent extends Publisher implements Serializable, Runnable {
         }
     }
 
-    //method to set world
+    //method to set the world
     public void setWorld(Simulation world)
     {
         this.world = world;
