@@ -27,6 +27,17 @@ public class Agent extends Publisher implements Serializable, Runnable {
         this.yc = Simulation.SIZE;
     }
 
+    public Agent() {
+        suspended = false;
+        stopped = false;
+        thread = null;
+
+        // randomly initialize position and heading
+        heading = Heading.random();
+        xc = Utilities.rng.nextInt(Simulation.SIZE);
+        yc = Utilities.rng.nextInt(Simulation.SIZE);
+    }
+
     public void run()
     {
         while (!stopped) {
@@ -119,7 +130,7 @@ public class Agent extends Publisher implements Serializable, Runnable {
     }
 
     //method to set the world
-    private void setWorld(Simulation world)
+    public void setWorld(Simulation world)
     {
         this.world = world;
     }
