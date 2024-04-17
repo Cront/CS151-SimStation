@@ -83,11 +83,19 @@ public abstract class Agent extends Publisher implements Serializable, Runnable 
 
     public void move(int steps) {
         for (int i = 0; i < steps; i++) {
-            this.xc = (xc + Simulation.SIZE + heading.get_x_dir()) % Simulation.SIZE;
-            this.yc = (yc + Simulation.SIZE + heading.get_y_dir()) % Simulation.SIZE;
+            xc = (xc + heading.get_x_dir()) % Simulation.SIZE;
+            yc = (yc + heading.get_y_dir()) % Simulation.SIZE;
+
+            if (xc < 0) xc += Simulation.SIZE;
+            if (yc < 0) yc += Simulation.SIZE;
+
+            System.out.println("Moving to: " + xc + ", " + yc); // Debug print
+
             world.changed();
         }
     }
+
+
 
     private synchronized void checkSuspended() {
         try {
@@ -98,6 +106,13 @@ public abstract class Agent extends Publisher implements Serializable, Runnable 
         } catch (InterruptedException e) {
             Utilities.error(e);
         }
+    }
+    public double getX() {
+        return xc;
+    }
+
+    public double getY() {
+        return yc;
     }
 
     public void reset(boolean randomly) {

@@ -19,16 +19,15 @@ public class SimulationView extends View {
     }
 
     public void paintComponent(Graphics gc) {
-
-        //System.out.println("hits");
         super.paintComponent(gc);
-        for (int count = 0; count < ((Simulation)model).agents.size(); count ++) {
-            Agent temp = ((Simulation)model).agents.get(count);
-            temp.subscribe(this);
-            gc.fillOval((int)temp.xc - dotSize / 2, (int)temp.yc - dotSize / 2, dotSize, dotSize);
+        Simulation simulation = (Simulation) model;
+        for (Agent agent : simulation.getAgents()) {
+            int x = (int) (agent.getX() % getWidth());
+            int y = (int) (agent.getY() % getHeight());
+            gc.fillOval(x - dotSize / 2, y - dotSize / 2, dotSize, dotSize);
         }
-
     }
+
 
     public void update(){
         //System.out.println("repainting person/thing");

@@ -7,7 +7,7 @@ import java.util.*;
 
 public abstract class Simulation extends Model {
 
-    public final static int SIZE = 150;
+    public final static int SIZE = 700;
     protected ArrayList<Agent> agents = new ArrayList<>();
     private int clock = 0;
     transient private Timer timer; // timers aren't serializable
@@ -91,6 +91,12 @@ public abstract class Simulation extends Model {
     }
 
     public abstract void populate();
+
+    public List<Agent> getAgents() {
+        synchronized (agents) {
+            return new ArrayList<>(agents); // Returns a copy to avoid concurrent modification issues
+        }
+    }
 
     public void add_agent(Agent agent) {
         agents.add(agent);
