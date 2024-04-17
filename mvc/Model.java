@@ -4,41 +4,25 @@ import java.beans.*;
 
 
 public abstract class Model extends Publisher implements Serializable {
-
-
+    Boolean unsavedChanges = false;
     String fileName = null;
-
-
-//    protected PropertyChangeSupport mPcs =
-//            new PropertyChangeSupport(this);
-//
-//    public void firePropertyChange(String propertyName, Object oldValue, Object newValue) {
-//        mPcs.firePropertyChange(propertyName, oldValue, newValue);
-//    }
-
-    //    public void serializeModel(String filename) {
-//        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(filename))) {
-//            out.writeObject(this);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
-//
-//    public static Model deserializeModel(String filename) {
-//        Model model = null;
-//        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(filename))) {
-//            model = (Model) in.readObject();
-//        } catch (IOException | ClassNotFoundException e) {
-//            e.printStackTrace();
-//        }
-//        return model;
-//    }
-    Model test;
-    public void changed() {
+    public String getFileName() {
+        return fileName;
+    }
+    public void setFileName(String fileName){
+        this.fileName = fileName;
+    }
+    public Boolean getUnsavedChanges(){
+        return unsavedChanges;
+    }
+    public void setUnsavedChanges(Boolean unsavedChanges){
+        this.unsavedChanges = unsavedChanges;
+    }
+    public boolean hasUnsavedChanges(){
+        return this.unsavedChanges;
+    }
+    public void changed(){
+        setUnsavedChanges(true);
         notifySubscribers();
     }
-
-
-
-
 }

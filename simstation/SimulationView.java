@@ -1,11 +1,7 @@
 package simstation;
 
-import ca.CellView;
-import ca.Grid;
 import mvc.Model;
 import mvc.View;
-import stopLight.StopLightShape;
-import stopLight.Stoplight;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -26,7 +22,7 @@ public class SimulationView extends View {
 
     public void paintComponent(Graphics gc) {
 
-        System.out.println("hits");
+        //System.out.println("hits");
         super.paintComponent(gc);
         for (int count = 0; count < ((Simulation)model).agents.size(); count ++) {
             Agent temp = ((Simulation)model).agents.get(count);
@@ -37,7 +33,7 @@ public class SimulationView extends View {
     }
 
     public void update(){
-        System.out.println("repainting person/thing");
+        //System.out.println("repainting person/thing");
         this.repaint();
     }
 

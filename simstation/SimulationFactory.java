@@ -4,14 +4,8 @@ import mvc.AppFactory;
 import mvc.Command;
 import mvc.Model;
 import mvc.View;
-import stopLight.ChangeCommand;
 
 public abstract class SimulationFactory implements AppFactory {
-    public abstract Model makeModel();
-
-    public View makeView(Model m) {
-        return new SimulationView(m);
-    }
 
     public String[] getEditCommands() {
         return new String[] { "Start", "Suspend", "Resume", "Stop", "Stats" };
@@ -27,5 +21,28 @@ public abstract class SimulationFactory implements AppFactory {
             default -> null;
         };
     }
-    public String getTitle() {return "SimStation Simulator";};
+
+    public String[] getHelp() {
+        return new String[] {
+                "Click start to start the simulation",
+                "Click suspend to pause the simulation",
+                "Click resume to resume the simulation",
+                "Click stop to stop the simulation",
+                "Click stats to show statistics"
+        };
+    }
+
+    public View makeView(Model m) {
+        return new SimulationView(m);
+    }
+
+//    public abstract Model makeModel();
+
+    @Override
+    public String getTitle() { return "SimStation Simulator"; }
+
+    @Override
+    public String about() {
+        return "SimStation Team ZSH";
+    }
 }
