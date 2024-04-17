@@ -8,16 +8,15 @@ import mvc.Utilities;
 import java.io.Serializable;
 
 
-public class Agent extends Publisher implements Serializable, Runnable {
+public abstract class Agent extends Publisher implements Serializable, Runnable {
 
     protected String name;
     protected Heading heading;
-    protected int xc;
-    protected int yc;
+    protected double xc;
+    protected double yc;
     protected boolean suspended = false;
     protected boolean stopped = false;
     protected transient Thread thread;
-
     protected Simulation world;
 
     public Agent(String name, Simulation world) {
@@ -38,84 +37,69 @@ public class Agent extends Publisher implements Serializable, Runnable {
         yc = Utilities.rng.nextInt(Simulation.SIZE);
     }
 
+    @Override
     public void run()
     {
+        thread = Thread.currentThread();
         while (!stopped) {
-            if (!suspended) {
-                update();
-                world.changed();
-            }
             try {
+                update();
                 Thread.sleep(20); // Adjust sleep time for smooth graphics
+                checkSuspended();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
+        world.changed();
     }
 
-    public void start()
-    {
-        if (thread == null) {
-            thread = new Thread(this);
-            thread.start();
-        }
+    public synchronized void start() {
+        thread = new Thread(this);
+        thread.start();
     }
 
 
-    public void suspend()
+    public synchronized void suspend()
     {
         suspended = true;
     }
 
-    public void resume()
+    public synchronized void resume()
     {
         suspended = false;
+        notify();
+
+        if (thread == null) {
+            start();
+        }
     }
 
-    public void stop()
+    public synchronized void stop()
     {
         stopped = true;
     }
 
-    public void update()
-    {
-        //to do in subclasses
-    }
+    public abstract void update();
 
     public void move(int steps) {
-        for (int i = 0; i < steps; i ++) {
-            Heading randomHeading = Heading.random();
-            switch (randomHeading.direction) {
-                case 0:
-                    xc += 1;
-                    break;
-                case 1:
-                    yc -= 1;
-                    break;
-                case 2:
-                    xc -= 1;
-                    break;
-                case 3:
-                    yc += 1;
-                    break;
-            }
+        for (int i = 0; i < steps; i++) {
+            this.xc = (xc + Simulation.SIZE + heading.get_x_dir()) % Simulation.SIZE;
+            this.yc = (yc + Simulation.SIZE + heading.get_y_dir()) % Simulation.SIZE;
             world.changed();
         }
     }
 
-    protected static class Heading implements Serializable
-    {
-
-        public  int direction;
-
-        public Heading(int direction) {
-            this.direction = direction;
-        }
-
-        public static Heading random() {
-            return new Heading(Utilities.rng.nextInt(4));
+    private synchronized void checkSuspended() {
+        try {
+            while (!stopped && suspended) {
+                wait();
+                suspended = false;
+            }
+        } catch (InterruptedException e) {
+            Utilities.error(e);
         }
     }
+
     public void reset(boolean randomly) {
         if (randomly)
         {
@@ -133,5 +117,37 @@ public class Agent extends Publisher implements Serializable, Runnable {
     public void setWorld(Simulation world)
     {
         this.world = world;
+    }
+
+    protected static class Heading implements Serializable
+    {
+        public final double x_dir;
+        public final double y_dir;
+
+        public Heading(double x_dir, double y_dir) {
+            double direction = Math.pow(x_dir, 2) + Math.pow(y_dir, 2);
+
+            double square_dir = Math.sqrt(direction);
+            this.x_dir = x_dir / square_dir;
+            this.y_dir = y_dir / square_dir;
+        }
+
+        public double get_x_dir() {
+            return x_dir;
+        }
+
+        public double get_y_dir() {
+            return y_dir;
+        }
+
+        public static Heading random() {
+            double x_dir = Math.random();
+            double y_dir = Math.sqrt(1 - Math.pow(x_dir, 2));
+
+            double x_mul = Math.random() < 0.5 ? 1 : -1;
+            double y_mul = Math.random() < 0.5 ? 1 : -1;
+
+            return new Heading(x_dir * x_mul, y_dir * y_mul);
+        }
     }
 }

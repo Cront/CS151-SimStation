@@ -25,7 +25,7 @@ public class SimulationView extends View {
         for (int count = 0; count < ((Simulation)model).agents.size(); count ++) {
             Agent temp = ((Simulation)model).agents.get(count);
             temp.subscribe(this);
-            gc.fillOval(temp.xc - dotSize / 2, temp.yc - dotSize / 2, dotSize, dotSize);
+            gc.fillOval((int)temp.xc - dotSize / 2, (int)temp.yc - dotSize / 2, dotSize, dotSize);
         }
 
     }

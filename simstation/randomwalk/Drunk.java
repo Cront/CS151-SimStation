@@ -2,12 +2,9 @@ package simstation.randomwalk;
 
 import mvc.*;
 import simstation.*;
-import java.awt.*;
-import java.util.Iterator;
 
 class Drunk extends Agent {
 
-    boolean running = true;
     public Drunk() {
         super();
         heading = Heading.random();
@@ -20,12 +17,12 @@ class Drunk extends Agent {
         move(steps);
     }
 
-    @Override
-    public void start()
-    {
-        while(running) {
-            update();
-        }
-    }
+//    @Override
+//    public void start()
+//    {
+//        while(running) {
+//            update();
+//        }
+//    }
 
 }
