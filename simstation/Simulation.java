@@ -62,7 +62,7 @@ public abstract class Simulation extends Model {
     }
 
     private double distance(Agent agent1, Agent agent2) {
-        return Math.sqrt(Math.pow(agent1.xc-agent2.xc, 2) + Math.pow(agent1.yx - agent2.yx, 2));
+        return Math.sqrt(Math.pow(agent1.xc-agent2.xc, 2) + Math.pow(agent1.yc - agent2.yc, 2));
     }
 
     public Agent get_neighbors(Agent a, int radius) {

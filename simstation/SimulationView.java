@@ -3,8 +3,6 @@ package simstation;
 import mvc.Model;
 import mvc.View;
 
-import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.*;
 
 
@@ -27,7 +25,7 @@ public class SimulationView extends View {
         for (int count = 0; count < ((Simulation)model).agents.size(); count ++) {
             Agent temp = ((Simulation)model).agents.get(count);
             temp.subscribe(this);
-            gc.fillOval(temp.xc - dotSize / 2, temp.yx - dotSize / 2, dotSize, dotSize);
+            gc.fillOval(temp.xc - dotSize / 2, temp.yc - dotSize / 2, dotSize, dotSize);
         }
 
     }
