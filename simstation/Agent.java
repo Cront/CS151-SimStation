@@ -3,6 +3,7 @@ package simstation;
 import mvc.Model;
 import mvc.Publisher;
 import mvc.Utilities;
+import simstation.Simulation;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -11,69 +12,117 @@ import java.util.Iterator;
 
 public class Agent extends Publisher implements Serializable, Runnable {
 
-    private String name;
+    protected String name;
     protected Heading heading;
     protected int xc;
-    protected int yx;
-    private boolean suspended = false;
-    private boolean stopped = false;
+    protected int yc;
+    protected boolean suspended = false;
+    protected boolean stopped = false;
     protected transient Thread thread;
 
-    private Simulation world;
+    protected Simulation world;
 
-    public void run() {
-
+    public Agent(String name, Simulation world) {
+        this.name = name;
+        this.world = world;
+        this.xc = Simulation.SIZE;
+        this.yc = Simulation.SIZE;
     }
 
-    public void start() {
+    public void run()
+    {
+        while (!stopped) {
+            if (!suspended) {
+                update();
+                world.changed();
+            }
+            try {
+                Thread.sleep(20); // Adjust sleep time for smooth graphics
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
+    public void start()
+    {
+        if (thread == null) {
+            thread = new Thread(this);
+            thread.start();
+        }
     }
 
 
-    public void suspend() {
-
+    public void suspend()
+    {
+        suspended = true;
     }
 
-    public void resume() {
-
+    public void resume()
+    {
+        suspended = false;
     }
 
-    public void stop() {
-
+    public void stop()
+    {
+        stopped = true;
     }
 
-    public void update() {
-
+    public void update()
+    {
+        //to do in subclasses
     }
 
     public void move(int steps) {
         for (int i = 0; i < steps; i ++) {
-            if (Heading.direction == 1) {
-                xc += 1;
-            } else if (Heading.direction == 2) {
-                yx += -1;
-            } else if (Heading.direction == 3) {
-                xc += -1;
-            } else if (Heading.direction == 4) {
-                yx += 1;
+            Heading randomHeading = Heading.random();
+            switch (randomHeading.direction) {
+                case 0:
+                    xc += 1;
+                    break;
+                case 1:
+                    yc -= 1;
+                    break;
+                case 2:
+                    xc -= 1;
+                    break;
+                case 3:
+                    yc += 1;
+                    break;
             }
             world.changed();
         }
     }
 
-    protected static class Heading {
+    protected static class Heading implements Serializable
+    {
 
-        public static int direction;
-        static Heading test = new Heading();
-        public Heading() {
-            int direction = 0;
+        public  int direction;
+
+        public Heading(int direction) {
+            this.direction = direction;
         }
 
         public static Heading random() {
-            direction = Utilities.rng.nextInt(4);
-            return test;
-
-
+            return new Heading(Utilities.rng.nextInt(4));
         }
+    }
+    public void reset(boolean randomly) {
+        if (randomly)
+        {
+            xc = Utilities.rng.nextInt(Simulation.SIZE);
+            yc = Utilities.rng.nextInt(Simulation.SIZE);
+        }
+        else
+        {
+            xc = 0;
+            yc = 0;
+        }
+    }
+
+    //method to set the world
+    private void setWorld(Simulation world)
+    {
+        this.world = world;
     }
 }
