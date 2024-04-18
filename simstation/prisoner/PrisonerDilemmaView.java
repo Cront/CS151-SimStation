@@ -9,14 +9,13 @@ import java.awt.*;
 public class PrisonerDilemmaView extends SimulationView {
 
     public PrisonerDilemmaView(Model model) {
-        super(model);  // Call the superclass constructor with the model
+        super(model);
     }
 
     @Override
     public void paintComponent(Graphics gc) {
-        super.paintComponent(gc);  // Maintain the basic painting logic
+        super.paintComponent(gc);
 
-        // Now add specific drawing logic for Prisoner's Dilemma
         Simulation simulation = (Simulation) model;
         for (Agent agent : simulation.getAgents()) {
             if (agent instanceof Prisoner) {
@@ -24,7 +23,6 @@ public class PrisonerDilemmaView extends SimulationView {
                 int x = (int) (prisoner.getX() % getWidth());
                 int y = (int) (prisoner.getY() % getHeight());
 
-                // Color coding based on whether the prisoner cooperated or cheated last
                 if (prisoner.partnerCheatedLastTime()) {
                     gc.setColor(Color.RED);
                 } else {
@@ -34,7 +32,6 @@ public class PrisonerDilemmaView extends SimulationView {
                 int dotSize = 50;
                 gc.fillOval(x - dotSize / 2, y - dotSize / 2, dotSize, dotSize);
 
-                // Optionally, draw the fitness score
                 gc.setColor(Color.BLACK);
                 gc.drawString("Fitness: " + prisoner.getFitness(), x + dotSize, y);
             }

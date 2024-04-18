@@ -4,7 +4,10 @@ import mvc.*;
 import simstation.SimulationFactory;
 
 public class RandomWalkFactory extends SimulationFactory {
+    @Override
     public Model makeModel() { return new RandomWalkSimulation(); }
+
+    @Override
     public String getTitle() { return "Random Walks";}
 
 //    @Override

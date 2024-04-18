@@ -3,9 +3,7 @@ package simstation.prisoner;
 import mvc.*;
 import simstation.Simulation;
 import simstation.SimulationPanel;
-import simstation.randomwalk.RandomWalkFactory;
 
-import javax.swing.*;
 
 public class PrisonerDilemmaSimulation extends Simulation {
 
@@ -18,7 +16,7 @@ public class PrisonerDilemmaSimulation extends Simulation {
                 new TitForTatStrategy()
         };
 
-        for (int i = 0; i < 40; i++) {  // Assume 40 prisoners
+        for (int i = 0; i < 40; i++) {
             Prisoner prisoner = new Prisoner("Prisoner " + i, this, strategies[i % 4]);
             add_agent(prisoner);
         }
