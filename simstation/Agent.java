@@ -44,7 +44,7 @@ public abstract class Agent extends Publisher implements Serializable, Runnable 
         while (!stopped) {
             try {
                 update();
-                Thread.sleep(20); // Adjust sleep time for smooth graphics
+                Thread.sleep(20);
                 checkSuspended();
             } catch (InterruptedException e) {
                 e.printStackTrace();

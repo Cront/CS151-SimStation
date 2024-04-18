@@ -10,7 +10,7 @@ public abstract class Simulation extends Model {
     public final static int SIZE = 700;
     protected ArrayList<Agent> agents = new ArrayList<>();
     private int clock = 0;
-    transient private Timer timer; // timers aren't serializable
+    transient private Timer timer;
     private boolean is_running = false;
     private boolean is_suspended = false;
 
