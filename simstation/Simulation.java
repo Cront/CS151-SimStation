@@ -7,7 +7,7 @@ import java.util.*;
 
 public abstract class Simulation extends Model {
 
-    public final static int SIZE = 700;
+    public final static int SIZE = 200;
     protected ArrayList<Agent> agents = new ArrayList<>();
     private int clock = 0;
     transient private Timer timer; // timers aren't serializable
@@ -64,6 +64,7 @@ public abstract class Simulation extends Model {
     private double distance(Agent agent1, Agent agent2) {
         return Math.sqrt(Math.pow(agent1.xc-agent2.xc, 2) + Math.pow(agent1.yc - agent2.yc, 2));
     }
+
 
     public Agent get_neighbors(Agent a, int radius) {
         int start = Utilities.rng.nextInt(agents.size());
